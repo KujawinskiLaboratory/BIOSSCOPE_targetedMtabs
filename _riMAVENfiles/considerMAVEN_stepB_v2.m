@@ -24,11 +24,11 @@ function [sampleNames, keepGoodData] = considerMAVEN_stepB_v2(tableOne,tableMix8
 tableOne.flag(:) ={[]}; %dumb MATLAB option for adding empty column
 
 for a = 1:size(tableOne,1);
-%     %stop here for troubleshooting as needed   
-%     if strcmp(tableOne.mtabName(a),'trehalose_387 neg')
-%         %fprintf('here')
-%         %tableOne.mtabName(a)
-%     end
+    %stop here for troubleshooting as needed   
+    if strcmp(tableOne.mtabName(a),'lumichrome')
+        %tableOne.mtabName(a)
+        %keyboard
+    end
     
     %sampleNames will have been repeated in tableOne (oops) check the order
     if ~isempty(tableOne.tData{a})
@@ -76,8 +76,12 @@ for a = 1:size(tableOne,1);
             clear s ks
             
             %calculate parameters of the standard curve, if length(xdata>2)
+            try
             dataOut = considerMAVEN_stepC_v1(xdata,ydata,maxInSamples);
-
+            catch
+                keyboard
+            end
+            
             if strcmp(dataOut,'QCfail')
                  calcConc = [];
                  %put in a marker
@@ -102,7 +106,11 @@ for a = 1:size(tableOne,1);
             maxInSamples = max(tData(ks)); 
             clear s ks
             
+            try
             dataOut = considerMAVEN_stepC_v1(xdata,ydata,maxInSamples);
+            catch
+                keyboard
+            end
             if strcmp(dataOut,'QCfail');
                 calcConc = [];
                 tableOne.flag(a) = {'QCfail'};

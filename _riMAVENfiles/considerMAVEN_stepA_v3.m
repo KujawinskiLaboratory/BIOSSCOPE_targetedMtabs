@@ -24,33 +24,34 @@ function [exportCurves] = considerMAVEN_stepA_v2(CSVfileFromMAVEN,sampleInfoFile
 %the data are pos or neg mode
 % This code was previously part of considerMAVEN
 %KL 6/30/2021
+%KL 1/11/2023 - change to using with Altis data, polarity switching
 
 % warning('off','MATLAB:table:ModifiedAndSavedVarnames')
 % warning('off','stats:dataset:ModifiedVarnames')
 warning('off')
 
-switch ionMode
-    case 'positive'
-        %maybe this will be easier to read:
-        special = table();
-        special.cases(1) = {'2-deoxyinosine_Na pos'}; special.match(1) = {''};
-        special.cases(2) = {'asparagine'}; special.match(2) = {'asparagine confirm 2'};
-        special.cases(3) = {'isoleucine'}; special.match(3) = {'isoleucine confirm 2'};
-        
-    case 'negative'
-        special = table();
-        special.cases(1) = {'desthiobiotin neg'}; special.match(1) = {''};
-        special.cases(2) = {'3-methyl-2-oxobutanoic acid'}; special.match(2) = {''};
-        special.cases(3) = {'4-methyl-2-oxopentanoic acid'}; special.match(3) = {''};
-        special.cases(4) = {'3-3-dimethyl-2oxobutanoic acid'}; special.match(4) = {''};
-        special.cases(5) = {'2-methyl-4-oxopentanoic acid'}; special.match(5) = {''};
-        special.cases(6) = {'isethionic acid '}; special.match(6) = {'isethionic acid confirm 1'}; 
-        special.cases(7) = {'2oxohexanoic acid'}; special.match(7) = {''};
-        
+switch ionMode       
     case 'both'
         special = table();
-        special.cases(1) = NaN; special.match(1) = NaN;
+        special.cases(1) = {'6-phosphogluconic acid'}; special.match(1) = {''};
+        special.cases(2) = {'3-methyl-2-oxobutanoic acid'}; special.match(2) = {''};%maybe OK now
+        special.cases(3) = {'4-methyl-2-oxopentanoic acid'}; special.match(3) = {''};%still not great confirm
+        special.cases(4) = {'3-3-dimethyl-2oxobutanoic acid'}; special.match(4) = {''};
+        special.cases(5) = {'2-methyl-4-oxopentanoic acid'}; special.match(5) = {''};
+        special.cases(6) = {'2oxohexanoic acid'}; special.match(6) = {''}; %maybe OK now
+        special.cases(7) = {'glucosamine'}; special.match(7) = {''}; 
+        special.cases(8) = {'glucosamine162'}; special.match(8) = {''}; 
+        special.cases(9) = {'T_90to27'}; special.match(9) = {''}; 
+        special.cases(10) = {'T_90to30'}; special.match(10) = {''}; 
+        special.cases(11) = {'T_90to44'}; special.match(11) = {''}; 
+        special.cases(12) = {'T_90to62'}; special.match(12) = {''}; 
+        special.cases(13) = {'T_90to72'}; special.match(13) = {''}; 
         
+        
+        
+    case 'mix8'
+        special = table();
+        special.cases(1) = NaN; special.match(1) = NaN;
 end
 
 srm = dataset('File',SRMfile,'delimiter',',');
@@ -82,7 +83,12 @@ for a = 1:length(compoundList);
         tn = strcat(compoundList.name(a),' confirm');
         sn = strcmp(tn,srm.compound);
         ks = find(sn==1);
-        compoundList.indexConfirm(a,1) = ks;
+        try
+            compoundList.indexConfirm(a,1) = ks;
+        catch
+            %if you are here, there is no match bw name and name+confirm
+            keyboard
+        end
         clear ks tn sn
     elseif ~isempty(h) && ~isempty(special.match{h})
         %setup the name to use in special - go find that
@@ -134,16 +140,23 @@ end
 %setup empty matrix for the data and a separate matrix for error
 %KL 3/15/2021 updated to pull concentrations from file
 switch ionMode
-    case 'negative'
-        kStandard = find((strcmp(sampleInfo.SampleType,matchCurve)==1) & (strcmp(sampleInfo.ionMode,'negative')==1));           
-    case 'positive'
-        kStandard = find((strcmp(sampleInfo.SampleType,matchCurve)==1) & (strcmp(sampleInfo.ionMode,'positive')==1));   
     case 'both'
-        kStandard = find((strcmp(sampleInfo.SampleType,matchCurve)==1) & (strcmp(sampleInfo.ionMode,'both')==1));          
+        kStandard = find((strcmp(sampleInfo.SampleType,matchCurve)==1) & (strcmp(sampleInfo.ionMode,'both')==1));   
+    case 'mix8'
+        kStandard = find((strcmp(sampleInfo.SampleType,matchCurve)==1) & (strcmp(sampleInfo.ionMode,'mix8')==1));          
 end
 
 setStandardConcentrations = sampleInfo.concentration_ngML(kStandard); %remember - dataset...not table
-        
+%%? is this a MATLAB version thing, working on laptop with MATLAB 2019b,
+%%this is now a cell?
+% %but...back on desktop, and this is fine, comment out for now.
+% v = ver;
+% if strcmp(v(1).Release,'(R2019b)')
+%     setStandardConcentrations = str2double(sampleInfo.concentration_ngML(kStandard)); %remember - dataset...not table
+% else
+%     error('different version of MATLAB')
+% end
+
 standardNames = sampleInfo.FileName(kStandard);
 nStandards = length(kStandard);
 
@@ -178,9 +191,9 @@ for a = 1:length(compoundList);
     exportCurves.mtabName(a) = compoundList.name(a);
     %exportCurves.concentration{a} =  setStandardConcentrations;
 
-    if strcmp(compoundList.name(a),'fumaric acid')
+    if strcmp(compoundList.name(a),{'lumichrome'})
         %stop here for troubleshooting as needed
-        %fprintf('here')
+        %keyboard
         %compoundList.name(a)
     end
     
@@ -241,7 +254,11 @@ for a = 1:length(compoundList);
         end         
             
         ydata(kBad) = NaN;
+        try
         xdata(kBad) = NaN; 
+        catch 
+            keyboard
+        end
         clear quality
         
         %from Winn (10/2016): remove low quality peaks from the data        
@@ -271,17 +288,11 @@ for a = 1:length(compoundList);
             clear k setL deviation
 
 
-            %MilliQ standard curve or the matrix?
-            switch curveType
-                case 'MQ'
-                    %put the blank at the beginning...remember that this will treat all
-                    %blanks equally...this may be a bad thing
-                    xdata = cat(1,0,xdata); 
-                    ydata = cat(1,meanBlank,ydata);                     
-                case 'matrix'
-                    %do nothing with meanBlank
-            end
-
+            %put the blank at the beginning...remember that this will treat all
+            %blanks equally...turn this off...we know have 0 ng/ml as 0,
+            %1/14/2023
+            %xdata = cat(1,0,xdata); 
+            %ydata = cat(1,meanBlank,ydata); 
 
             %need to export the xdata and ydata that have been pruned
             exportCurves.xdata{a} = xdata;
@@ -348,25 +359,26 @@ for a = 1:length(compoundList);
             T = array2table(sampleNames);
             T.sampleDetails = sampleDetails;
 
-            switch curveType
-                case 'MQ'
-                    %add in two more checks on the data...(1) if the peak area 
-                    %is less than the meanBlank, change to a zero 7/2/2021
-                    k = find(tData<meanBlank);
-                    tData(k) =0;
-                    clear k meanBlank                   
-                case 'matrix'
-                    %do nothing with meanBlank
+            %only do these next two checks if the compound is NOT a labeled
+            %standard...
+            sk = ismember(labeledStandards,compoundList.name{a});
+            if sum(sk)==0
+                %add in two more checks on the data...(1) if the peak area 
+                %is less than the meanBlank, change to a zero 7/2/2021
+                k = find(tData<meanBlank);
+                tData(k) =0;
+                clear k
+
+                %another option is to not allow values below the smallest 'good'
+                %value in the measured peak areas...add this 5/18/2016
+                k = find(tData< min(ydata(2:end)));
+                tData(k) = 0; %make zero 7/2/2021
+                clear k
             end
+            clear sk meanBlank
+
+            %end
             
-
-
-            %another option is to not allow values below the smallest 'good'
-            %value in the measured peak areas...add this 5/18/2016
-            k = find(tData< min(ydata(2:end)));
-            tData(k) = 0; %make zero 7/2/2021
-            clear k
-
             %had been using NaNs to change things with poor quality, change
             %them to 0 here before exporting 7/2/2021
             i = isnan(tData);
