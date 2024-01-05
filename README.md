@@ -1,7 +1,7 @@
 # BIOSSCOPE_targetedMtabs
 5 January 2024\
 Krista Longnecker\
-Woods Hole Oceanographic Institution\
+Woods Hole Oceanographic Institution\ 
 
 The most important file here is the Excel file labeled  ```KujawinskiWHOI_targetedMetabolites.2024.01.04.xlsx```. The details are as follows:\
 * The data has ID as the leftmost column, and will have the same number of rows as the discrete data file that is available on the BIOS-SCOPE Google Drive as of January 5, 2024
