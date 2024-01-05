@@ -1,5 +1,7 @@
 # riMAVEN
 read in and process MAVEN files\
-28 January 2022\
+5 January 2024\
 Krista Longnecker\
-Woods Hole Oceanographic Institution
+Woods Hole Oceanographic Institution\
+
+Updated because the switch to the Altis changed the code.
