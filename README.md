@@ -30,7 +30,7 @@ The most important file here is the Excel file labeled  ```KujawinskiWHOI_target
         * trigonelline
         * uric acid
      
-The 2016 to 2019 data are already in Metabolites as [MTBLS2356](https://www.ebi.ac.uk/metabolights/editor/MTBLS2356/descriptors); these data are covered in the Longnecker et al. (2024) publication available [here](https://dx.doi.org/10.1002/lno.12497) 
+The 2016 to 2019 data are already in the MetaboLights repository as [MTBLS2356](https://www.ebi.ac.uk/metabolights/editor/MTBLS2356/descriptors); these data are covered in the Longnecker et al. (2024) publication available [here](https://dx.doi.org/10.1002/lno.12497) 
 
 One final note is that these data are not corrected for limit of detection (LOD)/limit of quantification (LOQ). The data were collected on two different mass spectrometers, and the original TSQ showed changes in LOD over time. 
 
