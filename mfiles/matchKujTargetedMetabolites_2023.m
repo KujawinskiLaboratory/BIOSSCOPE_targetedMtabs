@@ -10,7 +10,7 @@ function matchKujTargetedMetabolites_2023
 %
 %This will export a MATLAB *mat file and a CSV file that can be shared
 %Krista Longnecker
-% 17 November 2023; updated 31 December 2023' 5 January 2024
+% 17 November 2023; updated 31 December 2023; 5 January 2024; 26 February 2024
 clear all
 close all
 warning('off','MATLAB:table:RowsAddedExistingVars')
@@ -24,10 +24,10 @@ ccnName{1} = '2023_06_BIOSSCOPE temporal run3\BIOSSCOPE_RP_Altis.2024.01.04_matr
 
 %Required file #2: what is the latest version of the discrete data file, and where is it?
 %% NOTE - this file sits in the BIOS-SCOPE Google Drive, get the latest version from there
-bottleFile = 'BATS_BS_COMBINED_MASTER_2024.01.04.xlsx';
+bottleFile = 'BATS_BS_COMBINED_MASTER_latest.xlsx';
 wDir = 'C:\Users\klongnecker\Documents\Dropbox\Current projects\Kuj_BIOSSCOPE\RawData\DataFiles_CTDandDiscreteSamples';
 BottleFileInfo = [wDir filesep bottleFile];
-sheetName = 'BATS_BS bottle file'; %this sheet has the discrete data on it
+sheetName = 'DATA'; %this sheet has the discrete data on it
 %read in the Excel file
 discreteData = readtable(BottleFileInfo,'sheet',sheetName);
 %tidying up
@@ -187,9 +187,9 @@ save('..\dataFiles\BIOSSCOPE_metabolites_2023.mat');
 %in the BIOS-SCOPE project can read. I am using Excel so I can export 
 %the metabolite information AND the metabolite data in one file
 %now add in the clean metabolite names so people know what metabolite is what
-eFilename = '..\KujawinskiWHOI_targetedMetabolites.2024.01.04.xlsx';
+eFilename = '..\KujawinskiWHOI_targetedMetabolites.2024.02.26.xlsx';
 
-forExport_ID = discreteData.ID;
+forExport_New_ID = array2table(discreteData.New_ID); %update to use New_ID February 2024
 
 %BIOS-=SCOPE uses -999 for missing data, so change the NaNs to -999
 i = isnan(mtabData_pM_EEcorrected);
@@ -198,9 +198,9 @@ clear i
 forExport_data = array2table(mtabData_pM_EEcorrected);
 forExport_data.Properties.VariableNames = LUtable.cleanName;
 
-forExport = cat(2,forExport_ID,forExport_data);
+forExport = cat(2,forExport_New_ID,forExport_data);
 if isequal(forExport.Properties.VariableNames{1},'Var1') %lazy hack to change name
-    forExport.Properties.VariableNames(1) = {'ID'};
+    forExport.Properties.VariableNames(1) = {'New_ID'};
 end
 
 writetable(forExport,eFilename,'Sheet','metaboliteData') %this is the data

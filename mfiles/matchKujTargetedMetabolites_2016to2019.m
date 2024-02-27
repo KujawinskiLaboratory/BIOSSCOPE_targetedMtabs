@@ -26,10 +26,10 @@ clear ccnName ccnDir
 
 %Required file #2: what is the latest version of the discrete data file, and where is it?
 %% NOTE - this file sits in the BIOS-SCOPE Google Drive, get the latest version from there
-bottleFile = 'BATS_BS_COMBINED_MASTER_2024.01.04.xlsx';
+bottleFile = 'BATS_BS_COMBINED_MASTER_latest.xlsx';
 wDir = 'C:\Users\klongnecker\Documents\Dropbox\Current projects\Kuj_BIOSSCOPE\RawData\DataFiles_CTDandDiscreteSamples';
 BottleFileInfo = [wDir filesep bottleFile];
-sheetName = 'BATS_BS bottle file'; %this sheet has the discrete data on it
+sheetName = 'DATA'; %this sheet has the discrete data on it
 %read in the Excel file
 discreteData = readtable(BottleFileInfo,'sheet',sheetName);
 %tidying up
