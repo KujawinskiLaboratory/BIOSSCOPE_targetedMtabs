@@ -1,10 +1,10 @@
 # BIOSSCOPE_targetedMtabs
-5 January 2024\
+26 February 2024\
 Krista Longnecker\
 Woods Hole Oceanographic Institution\ 
 
-The most important file here is the Excel file labeled  ```KujawinskiWHOI_targetedMetabolites.2024.01.04.xlsx```. The details are as follows:\
-* The data has ID as the leftmost column, and will have the same number of rows as the discrete data file that is available on the BIOS-SCOPE Google Drive as of January 5, 2024
+The most important file here is the Excel file labeled  ```KujawinskiWHOI_targetedMetabolites.2024.02.26.xlsx```. The details are as follows:\
+* The data has New_ID as the leftmost column, and will have the same number of rows as the discrete data file that is available on the BIOS-SCOPE Google Drive as of January 5, 2024
 * The remaining columns are the metabolites, one column per metabolite
 * A matrix-matched standard curve was used to convert from peak areas to concentration
 * The units for metabolites are pM
@@ -30,7 +30,7 @@ The most important file here is the Excel file labeled  ```KujawinskiWHOI_target
         * trigonelline
         * uric acid
      
-The 2016 to 2019 data are already in Metabolites as [MTBLS2356](https://www.ebi.ac.uk/metabolights/editor/MTBLS2356/descriptors); these data are covered in the Longnecker et al. (2024) publication available [here](https://dx.doi.org/10.1002/lno.12497) (DOI not yet active, but should be coming soon, 1/5/2024)
+The 2016 to 2019 data are already in Metabolites as [MTBLS2356](https://www.ebi.ac.uk/metabolights/editor/MTBLS2356/descriptors); these data are covered in the Longnecker et al. (2024) publication available [here](https://dx.doi.org/10.1002/lno.12497) 
 
 One final note is that these data are not corrected for limit of detection (LOD)/limit of quantification (LOQ). The data were collected on two different mass spectrometers, and the original TSQ showed changes in LOD over time. 
 
