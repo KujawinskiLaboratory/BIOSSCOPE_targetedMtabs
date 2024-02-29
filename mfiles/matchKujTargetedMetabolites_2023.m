@@ -67,11 +67,11 @@ clear existingMAT
 
 
 %only one batch in 2023, keep loop in case it's useful in the future
-for a2023 = 1
+for aYear = 1
     %Required file #1: Go get the *mat file that resulted from one run on
     %the Altis
     %will be metabolomics data - with cruise/cast/niskin 
-    oneRun = load(strcat(ccnDir,filesep,ccnName{a2023})); 
+    oneRun = load(strcat(ccnDir,filesep,ccnName{aYear})); 
     
     %%do some housecleaning on the TSQ data before proceeding
     %get rid of the oddballs in the TSQ data
@@ -170,6 +170,11 @@ for a2023 = 1
     end
     clear a
 
+    %need to change the name so that I can save multiple iterations of
+    %'oneRun' - prior version of code only saved the final step of the loop
+    allRuns(aYear) = oneRun;
+    clear oneRun   
+    
     %tidying up (set the following to 1 if all the data check out)
     if 1
         clear forKujMerge
@@ -177,7 +182,7 @@ for a2023 = 1
       
 
 end
-clear a2023
+clear aYear
 clear ccnDir ccnName
 
 %save the MATLAB file, the person who follows after me will need some MATLAB skills.

@@ -10,7 +10,7 @@ function matchKujTargetedMetabolites_2021
 %
 %This will export a MATLAB *mat file, which can be built on with the next batch of data 
 %Krista Longnecker
-% 17 November 2023; updated 30 December 2023; 5 January 2024
+% 17 November 2023; updated 30 December 2023; 5 January 2024; 29 February 2024
 clear all
 close all
 warning('off','MATLAB:table:RowsAddedExistingVars')
@@ -68,10 +68,10 @@ clear existingMAT
 
 
 %two batches of samples run in 2021
-for a2021 = 1:2
+for aYear = 1:2
     %Required file #1: Go get the *mat file that resulted from one run on the TSQ
     %will be metabolomics data - with cruise/cast/niskin 
-    oneRun = load(strcat(ccnDir,filesep,ccnName{a2021})); 
+    oneRun = load(strcat(ccnDir,filesep,ccnName{aYear})); 
     
     %%do some housecleaning on the TSQ data before proceeding
     %get rid of the oddballs in the TSQ data
@@ -166,10 +166,14 @@ for a2021 = 1:2
     if 1
         clear forKujMerge
     end
-      
+    
+    %need to change the name so that I can save multiple iterations of
+    %'oneRun' - prior version of code only saved the final step of the loop
+    allRuns(aYear) = oneRun;
+    clear oneRun      
 
 end
-clear a2021
+clear aYear
 clear ccnDir ccnName
 
 %save the MATLAB file, the person who follows after me will need some MATLAB skills.
