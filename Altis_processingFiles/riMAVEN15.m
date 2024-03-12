@@ -14,26 +14,26 @@ function riMAVEN15
 %and neg mode, however, we still have mix 8 separate from mix1-7 and this
 %requires some code shuffling.
 %KL 1/4/2024 updating to remove one contaminated sample
+%KL 3/12/2024 - adding sample files to show expected format.
 clear
 addpath('_riMAVENfiles','-end') %add the folder with the various functions to the path
-%housecleaning - when testing this is leaving files behind that are
-%annoying
+%housecleaning - when testing this is leaving files behind that are annoying
 fclose('all');
 delete('tempFile_mix8.csv');
 delete('tempFile_both.csv');
 
 %%%set the file names up front:
-NameOfFile = 'BIOSSCOPE_RP_Altis.2024.01.04_matrix.mat';
+NameOfFile = 'someDataFile.2024.03.12_matrix.mat';
 
 %which curve to use? MQ or matrix
 useCurve = 'matrix';
 
-%sequence file from the TSQ; baseDir is *not* the one with sqeuence, one
-%level higher
-baseDir = 'C:\Users\klongnecker\Documents\Dropbox\Current projects\Kuj_BIOSSCOPE\RawData\TSQ\2023_06_BIOSSCOPE temporal run3'; %desktop
-% baseDir = 'C:\Users\klongnecker\Documents\Dropbox\XX_Thrash\2023_0110_SaltySAR11'; %laptop - temp
+%sequence file from the TSQ; baseDir is *not* the one with sequence, one
+%level higher; 
+baseDir = 'sampleFiles'; 
 
-wDir = strcat(baseDir,filesep,'sequence_fromMethods');
+%wDir = strcat(baseDir,filesep,'sequence_fromMethods');
+wDir = baseDir; %note that KL usually had things in different folders, use this for GitHub
 fName = 'mtab_BIOSSCOPE_Temporal_2023_Rerun3_Altis_061223.KL.xlsx';
 sampleInfoFile = [wDir filesep fName];
 clear wDir fName
@@ -54,22 +54,25 @@ labeledCpds = {'cholic acid d4 mix8','cholic acid d4 neg',...
     '4-hydroxybenzoic acid d4 neg','indole-3-acetic acid d7 pos'};
 
 %%SRM files: three, but the Mix8 compounds are also duplicated in pos/neg
-SRM.sDir = strcat(baseDir,filesep,'SRMlist');
+%SRM.sDir = strcat(baseDir,filesep,'SRMlist');
+SRM.sDir = baseDir;
 % SRM.pos = [SRM.sDir filesep 'SRMList_Pos_forElMAVEN.2021.05.11.csv']; %pos mode cpds and those in Mix8
 % SRM.neg = [SRM.sDir filesep 'SRMList_Neg_forElMAVEN.2021.05.11.csv'];
 SRM.mix8 = [SRM.sDir filesep 'SRMTable_mtab_mix8.2023.06.23.forElMAVEN.csv']; %different curve []
 SRM.both = [SRM.sDir filesep 'SRMTable_mtab_mix1to8.2023.11.20.forElMAVEN.csv'];
 
 %will need the metabolomics standards sheet for cleanName and extraction efficiency 
+%you will need to pull this from the KujLab fileshare space as this is not
+%on GitHub
 fDir = 'Z:\_LabLogistics\MetabolomicsStandards';
-standardFile = [fDir filesep 'StandardListCompilation_2024.01.02.xlsm'];
+standardFile = [fDir filesep 'StandardListCompilation_2024.02.16.xlsm'];
 opts = detectImportOptions(standardFile,'Sheet','allMetabolites_sheet','NumHeaderLines',3);
 MWinfo = readtable([standardFile],opts);
 clear opts fDir standardFile ans
 
 %use the new function to concatanate files
 %No separate Mix8 analysis, but different curve, data are in pos/neg run
-mix8.folder = baseDir;
+mix8.folder = strcat(baseDir, filesep, 'ElMAVENoutput');
 mix8.fList = dir([mix8.folder filesep '*mix8*csv']);
 mix8.tempFile = 'tempFile_mix8.csv';
 catCSV(mix8.folder,{mix8.fList.name},mix8.tempFile);
@@ -80,7 +83,7 @@ mix8.stepOne =  considerMAVEN_stepA_v3(mix8.tempFile,sampleInfoFile,setQuality,1
 mix8cpds = setdiff(mix8.stepOne.mtabName,labeledCpds);
 
 %positive and negative ion mode data
-both.folder=baseDir;
+both.folder = strcat(baseDir, filesep, 'ElMAVENoutput');
 both.fList = dir([both.folder filesep '*both*csv']);
 both.tempFile = 'tempFile_both.csv';
 catCSV(both.folder,{both.fList.name},both.tempFile);
