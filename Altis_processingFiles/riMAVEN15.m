@@ -34,7 +34,7 @@ baseDir = 'sampleFiles';
 
 %wDir = strcat(baseDir,filesep,'sequence_fromMethods');
 wDir = baseDir; %note that KL usually had things in different folders, use this for GitHub
-fName = 'mtab_BIOSSCOPE_Temporal_2023_Rerun3_Altis_061223.KL.xlsx';
+fName = 'mtab_sampleSequenceAltis.2024.xlsx';
 sampleInfoFile = [wDir filesep fName];
 clear wDir fName
 
