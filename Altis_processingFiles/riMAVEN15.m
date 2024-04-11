@@ -34,7 +34,8 @@ baseDir = 'sampleFiles';
 
 %wDir = strcat(baseDir,filesep,'sequence_fromMethods');
 wDir = baseDir; %note that KL usually had things in different folders, use this for GitHub
-fName = 'mtab_sampleSequenceAltis.2024.xlsx';
+% fName = 'mtab_sampleSequenceAltis.2024.xlsx';
+fName = 'mtab_BIOSSCOPE_Temporal_2023_Rerun3_Altis_061223.KL.xlsx';
 sampleInfoFile = [wDir filesep fName];
 clear wDir fName
 
@@ -155,8 +156,9 @@ for a = 1:size(sInfo,1);
     %some variant of this to propagate sInfo with the basic information
     %add/edit rows as needed
     try
-    sInfo.tempFlag(a) = tInfo.tempFlag(ks);
+        sInfo.tempFlag(a) = tInfo.tempFlag(ks);
     catch
+        warning('did not find that metadata name in sequence')
         keyboard
     end
 %     sInfo.volFilt_L(a) = tInfo.volFilt_L(ks);
@@ -170,8 +172,9 @@ for a = 1:size(sInfo,1);
     [c ia tIdx] =intersect(tName,both.sNames);
 
     try
-    mtabData(:,a) = both.kgd.goodData(:,ks);
+        mtabData(:,a) = both.kgd.goodData(:,tIdx);
     catch
+        warning('If you are trapped here, there is probably an edit to the sequence that was not expected')
         keyboard
     end
     clear c ia tIdx tName
@@ -198,15 +201,15 @@ end
 clear a
  
 %just do a little bit of housecleaning
-if 1
+if 0
     toDelete = {'1-deoxy-D-xylulose-5-phosphate',...
         'acetylserine','s-(1-2-dicarboxyethyl)glutathione pos',...
         'prostaglandin A2 neg','prostaglandin D2 neg','prostaglandin E2 neg',...
         'prostaglandin F2 neg','prostaglandin keto neg','biotin neg',...
         'tetrahydrobiopterin240','glutamic acid pos'};
     toDelete = cat(2,toDelete,labeledCpds);
-elseif 0 %do nothing
-    
+elseif 1 %do nothing
+    toDelete = {''};
 end
 
 [c ia ib] = intersect(toDelete,mtabNames);
@@ -236,8 +239,8 @@ for a = 1:length(mtabNames)
         [r,c] = find(s==1);
         if isempty(r) % sarcosine in BIOS-SCOPE... && ~strcmp(mtabNames(a),'sarcosine')
             mtabNames(a)
+            warning('Something is wrong because I have no information on this compound')
             keyboard
-            error('Something is wrong because I have no information on this compound')
         end
 
         try
