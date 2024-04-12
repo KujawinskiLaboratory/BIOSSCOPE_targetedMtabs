@@ -11,6 +11,7 @@ function matchKujTargetedMetabolites_2023
 %This will export a MATLAB *mat file and a CSV file that can be shared
 %Krista Longnecker
 % 17 November 2023; updated 31 December 2023; 5 January 2024; 26 February 2024
+% KL updated 12 April 2024 
 clear all
 close all
 warning('off','MATLAB:table:RowsAddedExistingVars')
@@ -18,7 +19,7 @@ warning('off','MATLAB:table:RowsAddedExistingVars')
 %2023 data are as follow:
 %% These data files are on Krista's desktop in case you need to access them
 ccnDir = 'C:\Users\klongnecker\Documents\Dropbox\Current projects\Kuj_BIOSSCOPE\RawData\TSQ\';
-ccnName{1} = '2023_06_BIOSSCOPE temporal run3\BIOSSCOPE_RP_Altis.2024.01.04_matrix.mat'; %where ccn = cruise, cast, niskin
+ccnName{1} = '2023_06_BIOSSCOPE temporal run3\BIOSSCOPE_RP_Altis.2024.04.12_matrix.mat'; %where ccn = cruise, cast, niskin
 
 %Required file #1: the 2023 data, load that in the loop that follows below
 
@@ -50,6 +51,13 @@ tDir = '..\dataFiles';
 tFile = 'KujLab_metaboliteLookUpTable.xlsx';
 LUtable = readtable([tDir filesep tFile]);
 clear tDir tFile 
+
+%this is the most recent file, so I will also export an Excel file that the others
+%in the BIOS-SCOPE project can read. I am using Excel so I can export 
+%the metabolite information AND the metabolite data in one file
+%now add in the clean metabolite names so people know what metabolite is what
+eFilename = '..\KujawinskiWHOI_targetedMetabolites.2024.04.12.xlsx';
+
 
 %put in some checks. Frist, if the two versions of LUtable are different,
 %there is an issue
@@ -187,12 +195,6 @@ clear ccnDir ccnName
 
 %save the MATLAB file, the person who follows after me will need some MATLAB skills.
 save('..\dataFiles\BIOSSCOPE_metabolites_2023.mat');
-
-%this is the most recent file, so I will also export an Excel file that the others
-%in the BIOS-SCOPE project can read. I am using Excel so I can export 
-%the metabolite information AND the metabolite data in one file
-%now add in the clean metabolite names so people know what metabolite is what
-eFilename = '..\KujawinskiWHOI_targetedMetabolites.2024.02.26.xlsx';
 
 forExport_New_ID = array2table(discreteData.New_ID); %update to use New_ID February 2024
 

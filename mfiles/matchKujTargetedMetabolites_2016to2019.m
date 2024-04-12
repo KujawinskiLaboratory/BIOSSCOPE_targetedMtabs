@@ -36,9 +36,9 @@ discreteData = readtable(BottleFileInfo,'sheet',sheetName);
 clear bottleFile wDir BottleFileInfo sheetName
 
 %Required file #3: need the Excel file with details on the Kuj lab metabolites
-%% this file is now in the /dataFiles folder on GitHub, you may need a new path
-mFile = '../dataFiles';
-mDir = 'StandardListCompilation_2024.01.02.xlsm';
+%% this file is on the KujLab fileshare, you may need a different path
+mFile = 'Z:\_LabLogistics\MetabolomicsStandards';
+mDir = 'StandardListCompilation_2024.04.12.xlsm';
 standardFile = [mFile filesep mDir];
 opts = detectImportOptions(standardFile,'Sheet','allMetabolites_sheet','NumHeaderLines',3);
 MWinfo = readtable([standardFile],opts);
