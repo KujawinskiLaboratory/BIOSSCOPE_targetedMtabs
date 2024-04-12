@@ -1,9 +1,9 @@
 # BIOSSCOPE_targetedMtabs
-26 February 2024\
+12 April 2024\
 Krista Longnecker\
 Woods Hole Oceanographic Institution
 
-The most important file here is the Excel file labeled  ```KujawinskiWHOI_targetedMetabolites.2024.02.26.xlsx```. The details are as follows:
+The most important file here is the Excel file labeled  ```KujawinskiWHOI_targetedMetabolites.2024.04.12.xlsx```. The details are as follows:
 * The data has New_ID as the leftmost column, and will have the same number of rows as the discrete data file that is available on the BIOS-SCOPE Google Drive as of January 5, 2024
 * The remaining columns are the metabolites, one column per metabolite
 * A matrix-matched standard curve was used to convert from peak areas to concentration
